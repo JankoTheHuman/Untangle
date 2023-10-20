@@ -292,6 +292,7 @@ def chosenTaskChange(index, *args):
 def move(x,y):
     pyautogui.moveTo(x, y)
 
+
 def copy():
     pyautogui.hotkey('ctrl', 'c')
 
@@ -343,7 +344,12 @@ def textInput(str,interval):
 
 
 def start_tasks():
+
     try:
+        global i, k, l, m, n, tasksStarted
+
+        tasksStarted = True
+
         root.withdraw()
 
         try:
@@ -352,7 +358,7 @@ def start_tasks():
             entryWaitBeforeStart.delete(0, "end")
             entryWaitBeforeStart.insert(0,"0")
 
-        global i, k, l, m, n, tasksStarted
+
 
         try:
             n = int(ponavljanjeSekvenceEntry.get())
@@ -360,7 +366,6 @@ def start_tasks():
             ponavljanjeSekvenceEntry.delete(0, "end")
             ponavljanjeSekvenceEntry.insert(0,"1")
 
-        tasksStarted = True
         # ponavljanje sekvence n puta
         m = 0
         for m in range(n):
@@ -454,11 +459,15 @@ def start_tasks():
                         sleep(delay)
         root.deiconify()
         tasksStarted = False
-        startFindPos()
+        findPosition()
+        startF12()
     except pyautogui.FailSafeException:
         root.deiconify()
-        startFindPos()
         tasksStarted = False
+        findPosition()
+        startF12()
+
+
 
 
 def value_changed_pos_int_Repeat(i):
@@ -706,7 +715,7 @@ saveSeqBtn.grid(row=0, column=3)
 loadSeqBtn = Button(root, text="Load Sequence", style='info.outline' ,command=load_file)
 loadSeqBtn.grid(row=0, column=4)
 
-tooltipsBtn = Button(root, text="Tooltips/Help",style='warning.TButton', command=lambda: easygui.msgbox("Help and Tips for using Untangle:\n\n1) To stop sequence executing put mouse to any corner of the sceen and wait a bit until window shows again.\n2) Press F11 to get current position of your mouse and save it to latest task coordinates.\n3) All wait/delay times are in seconds(s).\n4)'Relative' moves mouse x or y amount relative to current mouse position. Example: value of 100 in X Axis moves mouse right 100 pixels, -100 moves to the left.\n5) Most of value entries accept only whole numbers, some accept negative or rational.\n6) Drag options clicks and holds mouse until the end of the drag. Delay value is how fast the drag is.\n7) Text input task can take up to 6000 characters.\n8) Delay in text input task changes how fast characters are inputted. 0.1 delay means every character is inputted after 1 10th of a second (That is the fastest input speed).\n9) Holding Delete Task button for 1 second deletes all tasks.\n\n\n\nMade by:\nJanko Veselinovic 2023", title="How to use"))
+tooltipsBtn = Button(root, text="Tooltips/Help",style='warning.TButton', command=lambda: easygui.msgbox("Help and Tips for using Untangle:\n\n1) To stop sequence executing put mouse to any corner of the sceen and wait a bit until window shows again.\n2) Press f11 to get current position of your mouse and save it to latest task coordinates.\n3) All wait/delay times are in seconds(s).\n4)'Relative' moves mouse x or y amount relative to current mouse position. Example: value of 100 in X Axis moves mouse right 100 pixels, -100 moves to the left.\n5) Most of value entries accept only whole numbers, some accept negative or rational.\n6) Drag options clicks and holds mouse until the end of the drag. Delay value is how fast the drag is.\n7) Text input task can take up to 6000 characters.\n8) Delay in text input task changes how fast characters are inputted. 0.1 delay means every character is inputted after 1 10th of a second (That is the fastest input speed).\n9) Holding Delete Task button for 1 second deletes all tasks.\n10) Pressing f12 starts the sequence or click on Start Tasks.\n\n\n\nMade by:\nJanko Veselinovic 2023", title="How to use"))
 tooltipsBtn.grid(row=2,column=4)
 
 style.configure('TButton', font=('Helvetica', 11), borderwidth=6)
@@ -722,24 +731,32 @@ def getPosition():
     entryXList[i-1].insert(0, str(X))
     entryYList[i-1].insert(0, str(Y))
 
+
+
 def findPosition():
     if tasksStarted:
         return
-    if i == 0:
-        root.after(50, startFindPos)
-        return
     if keyboard.is_pressed('f11'):
         getPosition()
-    root.after(50, startFindPos)
+    root.after(50, findPosition)
 
 
+def startF12():
+    while not tasksStarted:
+        time.sleep(0.05)
+        if keyboard.is_pressed('f12'):
+            start_tasks()
 
-def startFindPos():
+def startFindPosition():
     threading.Thread(target=findPosition).start()
+
+def startStartF12():
+    threading.Thread(target=startF12).start()
 
 
 addTask()
-startFindPos()
+startStartF12()
+startFindPosition()
 root.mainloop()
 
 
