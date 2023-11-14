@@ -1,2 +1,2 @@
--*- mode: python; -*-
-*.html linguist-language=Java
+*.tex linguist-language=python
+*.html linguist-language=Python
