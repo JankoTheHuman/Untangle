@@ -1,5 +1,5 @@
 # Untangle
-In the time of writing, this is my proudest project, I hope it will get overshadowed by another one soon.
+At the time of writing, this is my proudest project, I hope it will get overshadowed by another one soon.
 
 This is Untangled, it is a desktop app that takes in parameters of mouse positions and tasks you want it to do as well as other details such as the number of repetitions of a certain task,
 delay between each repetition, etc.
